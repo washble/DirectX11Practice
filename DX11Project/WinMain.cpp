@@ -1,17 +1,29 @@
 #include <Windows.h>
 #include "WindowsMessageMap.h"
 #include "tchar.h"
+#include <atlstr.h>
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static WindowsMessageMap mm;
-	
-	OutputDebugString(_T("") + * mm(msg, lParam, wParam).c_str());
+	OutputDebugStringA(mm(msg, lParam, wParam).c_str());
 
 	switch (msg)
 	{
 	case WM_CLOSE:
 		PostQuitMessage(69);
+		break;
+	case WM_KEYDOWN:
+		if (wParam == 'F')
+		{
+			SetWindowText(hWnd, _T("ChangeTitle"));
+		}
+		break;
+	case WM_KEYUP:
+		if (wParam == 'F')
+		{
+			SetWindowText(hWnd, _T("hw3dbutts"));
+		}
 		break;
 	default:
 		break;
@@ -30,7 +42,7 @@ int CALLBACK WinMain
 {
 	const auto pClassName = _T("hw3dbutts");
 	// Register window class
-	WNDCLASSEX wc = {0};
+	WNDCLASSEXW wc = {0};
 	wc.cbSize = sizeof(wc);
 	wc.style = CS_OWNDC;
 	wc.lpfnWndProc = WndProc;
@@ -43,10 +55,10 @@ int CALLBACK WinMain
 	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = pClassName;
 	wc.hIconSm = nullptr;
-	RegisterClassEx(&wc);
+	RegisterClassExW(&wc);
 
 	// Create window instance
-	HWND hWnd = CreateWindowExW
+	HWND hWnd = CreateWindowEx
 	(
 		0,
 		pClassName,
