@@ -1,4 +1,24 @@
 #include <Windows.h>
+#include "WindowsMessageMap.h"
+#include "tchar.h"
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	static WindowsMessageMap mm;
+	
+	OutputDebugString(_T("") + * mm(msg, lParam, wParam).c_str());
+
+	switch (msg)
+	{
+	case WM_CLOSE:
+		PostQuitMessage(69);
+		break;
+	default:
+		break;
+	}
+
+	return DefWindowProc(hWnd, msg, wParam, lParam);
+}
 
 int CALLBACK WinMain
 (
@@ -8,12 +28,12 @@ int CALLBACK WinMain
 	_In_ int nCmdShow
 )
 {
-	const auto pClassName = L"hw3dbutts";
+	const auto pClassName = _T("hw3dbutts");
 	// Register window class
-	WNDCLASSEX wc = { 0 };
+	WNDCLASSEX wc = {0};
 	wc.cbSize = sizeof(wc);
 	wc.style = CS_OWNDC;
-	wc.lpfnWndProc = DefWindowProc;
+	wc.lpfnWndProc = WndProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = hInstance;
@@ -23,14 +43,14 @@ int CALLBACK WinMain
 	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = pClassName;
 	wc.hIconSm = nullptr;
-	RegisterClassEx( &wc );
+	RegisterClassEx(&wc);
 
 	// Create window instance
 	HWND hWnd = CreateWindowExW
 	(
 		0,
 		pClassName,
-		L"DX11 Window",
+		_T("DX11 Window"),
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
 		500,
 		500,
@@ -45,7 +65,19 @@ int CALLBACK WinMain
 	// Show Window
 	ShowWindow(hWnd, SW_SHOW);
 
-	while (true);
+	// Message pump
+	MSG msg;
+	BOOL gResult;
+	while ((gResult = GetMessage(&msg, nullptr, 0, 0)) > 0)
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
 
-	return 0;
+	if (gResult == -1)
+	{
+		return -1;
+	}
+
+	return msg.wParam;
 }
