@@ -1,5 +1,7 @@
 #pragma once
-#include "HeaderWin.h"
+
+#include "DXWin.h"
+#include <tchar.h>
 
 class Window
 {
@@ -8,19 +10,19 @@ private:
 	class WindowClass
 	{
 	public:
-		static const char* GetName() noexcept;
+		static const TCHAR* GetName() noexcept;
 		static HINSTANCE GetInstance() noexcept;
 	private:
 		WindowClass() noexcept;
 		~WindowClass();
 		WindowClass(const WindowClass&) = delete;
 		WindowClass& operator=(const WindowClass&) = delete;
-		static constexpr const char* wndClassName = "DirectX Engine Window";
+		static constexpr const TCHAR* wndClassName = _T("DirectX Engine Window");
 		static WindowClass wndClass;
 		HINSTANCE hInst;
 	};
 public:
-	Window(int width, int height, const char* name) noexcept;
+	Window(int width, int height, const TCHAR* name) noexcept;
 	~Window();
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
@@ -29,7 +31,7 @@ private:
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 private:
-	int width;
-	int height;
+	int width = 200;
+	int height = 200;
 	HWND hWnd;
 };

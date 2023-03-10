@@ -1,5 +1,6 @@
 #include "Window.h"
 #include <sstream>
+#include <iostream>
 
 // Window Class Stuff
 Window::WindowClass Window::WindowClass::wndClass;
@@ -8,7 +9,7 @@ Window::WindowClass::WindowClass() noexcept
 	:
 	hInst(GetModuleHandle(nullptr))
 {
-	WNDCLASSEXA wc = { 0 };
+	WNDCLASSEX wc = { 0 };
 	wc.cbSize = sizeof(wc);
 	wc.style = CS_OWNDC;
 	wc.lpfnWndProc = HandleMsgSetup;
@@ -21,15 +22,15 @@ Window::WindowClass::WindowClass() noexcept
 	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = GetName();
 	wc.hIconSm = nullptr;
-	RegisterClassExA(&wc);
+	RegisterClassEx(&wc);
 }
 
 Window::WindowClass::~WindowClass()
 {
-	UnregisterClassA(wndClassName, GetInstance());
+	UnregisterClass(wndClassName, GetInstance());
 }
 
-const char* Window::WindowClass::GetName() noexcept
+const TCHAR* Window::WindowClass::GetName() noexcept
 {
 	return wndClassName;
 }
@@ -40,7 +41,7 @@ HINSTANCE Window::WindowClass::GetInstance() noexcept
 }
 
 // Window Stuff
-Window::Window(int width, int height, const char* name) noexcept
+Window::Window(int width, int height, const TCHAR* name) noexcept
 {
 	// calculate window size based on desired client region size
 	RECT wr;
@@ -49,9 +50,9 @@ Window::Window(int width, int height, const char* name) noexcept
 	wr.top = 100;
 	wr.bottom = height + wr.top;
 	AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
-	
+
 	// create window & get hWnd
-	hWnd = CreateWindowA(
+	hWnd = CreateWindow(
 		WindowClass::GetName(), name,
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,

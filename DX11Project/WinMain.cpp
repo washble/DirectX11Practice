@@ -1,4 +1,5 @@
 #include "Window.h"
+#include <tchar.h>
 
 int CALLBACK WinMain
 (
@@ -8,7 +9,7 @@ int CALLBACK WinMain
 	_In_ int nCmdShow
 )
 {
-	Window wnd(800, 300, "DX11Test");
+	Window wnd(800, 300, _T("DX11Test"));
 
 	// Message pump
 	MSG msg;

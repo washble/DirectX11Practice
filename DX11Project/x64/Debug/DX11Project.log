@@ -1,0 +1,6 @@
+﻿  window.cpp
+C:\Users\SEE\Desktop\Study\Study_DirectX\DX11Project\DX11Project\window.cpp(115,2): error C4996: 'mbstowcs': This function or variable may be unsafe. Consider using mbstowcs_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  WindowsMessageMap.cpp
+  WinMain.cpp
+C:\Users\SEE\Desktop\Study\Study_DirectX\DX11Project\DX11Project\WinMain.cpp(27,12): warning C4244: 'return': 'WPARAM'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
